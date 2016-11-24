@@ -3,6 +3,15 @@ The RAF file works for the DG4602.
 powered by Polaris
 """
 import numpy as np
+import pylab as plt
+import sys
+
+
+def draw(signal):
+    X = np.r_[0:len(signal)]
+    plt.plot(X,signal)
+    plt.show()
+    return
 
 def arb_to_raf(filename):
     infile = open(filename+'.arb')
@@ -58,21 +67,29 @@ def to_raf(signal,filename):
     signal = ((signal/signal.max()) * int("3fff", 16)).astype('int16')
     # Write the signal as binary.
     fp = open(filename+".RAF", "w")
+    draw(signal)
     signal.tofile(fp)
 
 def main():
-    while True:
-        filename = raw_input("input file name:")
-        filename = filename.split('.')
-        if filename[1]=='arb' or filename[1]=='ARB':
-            arb_to_raf(filename[0])
-        elif filename[1]=='txt' or filename[1]=='TXT':
-            txt_to_raf(filename[0])
-        elif filename[1]=='csv' or filename[1]=='CSV':
-            csv_to_raf(filename[0])
+    filename = []
+    if len(sys.argv)>1:
+        for i in range(1,len(sys.argv)):
+            filename.append(sys.argv[i])
+    else:
+        filename = raw_input("input file name[use space to split]:").split(' ')
+    for i in filename:
+        print i
+        infile = i.split('.')
+        if infile[1]=='arb' or infile[1]=='ARB':
+            arb_to_raf(infile[0])
+        elif infile[1]=='txt' or infile[1]=='TXT':
+            txt_to_raf(infile[0])
+        elif infile[1]=='csv' or infile[1]=='CSV':
+            csv_to_raf(infile[0])
         else:
             print "ERROR"
     return
 
 if __name__ == "__main__":
     main()
+    #plt.show()
