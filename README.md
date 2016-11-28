@@ -19,6 +19,13 @@
 ```
 
 ## Usage
+* If you have a txt/arb/csv file
 ```bash
 python to_raf.py [filename1] [filename2] ...
+```
+
+* If you have a list
+```python
+from to_raf import *
+to_raf(list,filename)
 ```

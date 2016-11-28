@@ -6,7 +6,6 @@ import numpy as np
 import pylab as plt
 import sys
 
-
 def draw(signal):
     X = np.r_[0:len(signal)]
     plt.plot(X,signal)
@@ -21,7 +20,7 @@ def arb_to_raf(filename):
             point = int(temp.split(':')[1])
     signal = []
     for i in range(point):
-        signal.append(int(infile.readline()))
+        signal.append(float(infile.readline()))
     to_raf(signal,filename)
     infile.close()
     return
@@ -56,17 +55,12 @@ def csv_to_raf(filename):
 
 def to_raf(signal,filename):
     """Convert the signal (already the correct length) to a RAF file."""
-    """
-    if len(signal)!=8192:
-        print "length should be 8192"
-        return
-    """
     signal = np.array(signal,dtype=float)
     # Shift and convert the signal
     signal = signal - signal.min()
     signal = ((signal/signal.max()) * int("3fff", 16)).astype('int16')
     # Write the signal as binary.
-    fp = open(filename+".RAF", "w")
+    fp = open(filename+".RAF", "wb")
     draw(signal)
     signal.tofile(fp)
 
